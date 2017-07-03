@@ -64,6 +64,8 @@ int main()
    printf("end server\n");
    freeaddrinfo(servinfo);
    close(s);
+   /*************/
+   
    return 0;
 
 }
