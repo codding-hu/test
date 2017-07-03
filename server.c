@@ -65,7 +65,7 @@ int main()
    freeaddrinfo(servinfo);
    close(s);
    /*************/
-   
+   /***/  
    return 0;
 
 }
