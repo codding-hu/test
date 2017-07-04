@@ -1,3 +1,4 @@
+/************* server ************************/
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -64,8 +65,6 @@ int main()
    printf("end server\n");
    freeaddrinfo(servinfo);
    close(s);
-   /*************/
-   /***/  
    return 0;
 
 }
