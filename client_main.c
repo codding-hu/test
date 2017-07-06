@@ -2,7 +2,7 @@
 int main()
 {
     
-         if(client_init("127.0.0.1","3920")!=0)
+         if(client_init("192.168.0.105","3920")!=0)
          {
     
                 printf("client_init failed\n");
