@@ -45,19 +45,33 @@ int client_exit()
 }
 int rev_buf(int s,char*buf)
 {
-
-  
-        int len =  recv(s,buf,100,0);
+        int len=0;
+        int len_rev=1024*96;
+        char*buf_p=buf;
+  while(1)
+        {
+        len +=  recv(s,buf_p,len_rev,0);
         if(len==0)
         {
             return 0;
         }
-        buf[len] = '\0';
-        printf("clinet : received %s \n",buf);
+        if(len>=1024*96)
+        {
+           count ++;
+           printf("rev: %d\n",count);                    
+           return len;
+         }
+         else 
+         {
+           len_rev-=len;
+           buf_p = buf+len;
+
+         }  
         if(strcmp(buf,"q")==0)
         {
         client_exit();
         return 0;  
         }
-        return 1;
+     }
+        
 }

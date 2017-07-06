@@ -40,27 +40,28 @@ int server_exit()
             close(s);
 
 }
-int send_buf(int fd,char*buf)
+int send_buf(int fd,char*buf,int len)
 {
 
    if(fd!= -1)
-   {
-      scanf("%s",msg);
-      int len  = strlen(msg);
-      buf[len] = '\0';
-      if(send(fd,buf,len,0)!=len){
+   {   
+      int len_send = send(fd,buf,len,0);
+      if(len_send!=len){
       
             printf("send error\n");
             return -1; 
 
-      }                                  
-     if(strcmp(msg,"q")==0){
+      }          
+     printf("send_len=%d\n",len_send);                        
+     if(strcmp(buf,"q")==0){
             server_exit();
             return 0;
 
      }
+    printf("test data = %u ,%u ,%u\n",buf[1024*96-1],buf[1024*96-2],buf[1024*96-3]);
+    count ++;
+    printf("send: %d\n",count);
     return 1;
    }
-
 }
 

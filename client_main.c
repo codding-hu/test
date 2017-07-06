@@ -13,12 +13,10 @@ int main()
          {
     
     
-          if( rev_buf(s,buf)<=0)
-          {
-                printf("client exit!\n");
-                break;
-          }
-    
+          int  len=rev_buf(s,buf);
+          printf("len = %d\n",len);
+          printf("test data = %u ,%u ,%u\n",buf[1024*96-1],buf[1024*96-2],buf[1024*96-3]);
+   
         }
         return 0;
     }
