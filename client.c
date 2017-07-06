@@ -6,51 +6,97 @@
 #include <string.h>
 #include <stdlib.h>
 #define  MAX_BACKLOG 20
-int main()
+int status;
+int s,s_bind;
+struct addrinfo hints;
+struct addrinfo *servinfo;
+struct sockaddr_storage their_addr;
+char buf[100];
+int rev_buf(int s,char*buf);
+int client_init(char*addr,char*port);
+int client_exit();
+int client_init(char*addr,char*port)
 {
-   int status;
-   int s,s_bind;
-   struct addrinfo hints;
-   struct addrinfo *servinfo;
-   struct sockaddr_storage their_addr;
    memset(&hints,0,sizeof(hints));
    hints.ai_family   = AF_UNSPEC;
    hints.ai_socktype = SOCK_STREAM;
    hints.ai_flags    = AI_PASSIVE;
    printf("TCP client\n");
-   if((status = getaddrinfo("127.0.0.1","3920",&hints,&servinfo))!=0){
+   if((status = getaddrinfo(addr,port,&hints,&servinfo))!=0){
       fprintf(stderr,"getaffrinfo error: %s\n",gai_strerror(status));
-      exit(1);
+      return -1;
    }  
    s = socket(servinfo->ai_family,servinfo->ai_socktype,servinfo->ai_protocol);
    if(s==-1){
 
        printf("socket error\n");
-       exit(1);
+       return -1;
 
    }
+   while(1){
    if(connect(s,servinfo->ai_addr,servinfo->ai_addrlen)==-1){
   
-       printf("connect failed\n");
-
+       printf("connect failed , try again!\n");
+       sleep(1);       
    }
-   char buf[100];
-   while(1){
+   else
+    {
+         break;
+    
+	} 
+   }
+   printf("conect success!\n"); 
+   return 0;
+   
+
+}
+int client_exit()
+{
+
+
+
+        freeaddrinfo(servinfo);
+        close(s);
+        return 0;
+}
+int rev_buf(int s,char*buf)
+{
+
+  
         int len =  recv(s,buf,100,0);
+        if(len==0)
+        {
+            return 0;
+        }
         buf[len] = '\0';
         printf("clinet : received %s \n",buf);
         if(strcmp(buf,"q")==0)
         {
-
-        freeaddrinfo(servinfo);
-        close(s);
+        client_exit();
         return 0;  
         }
-   }
-        freeaddrinfo(servinfo);
-        close(s);
-    /*************/
-   return 0;
+        return 1;
+}
+int main()
+{
    
+     if(client_init("127.0.0.1","3920")!=0)
+     {
 
+            printf("client_init failed\n");
+            return 0;         
+     }
+    
+      while(1) 
+     {
+
+
+      if( rev_buf(s,buf)<=0)
+      {
+            printf("client exit!\n");
+            break;
+      }
+
+    }
+    return 0;
 }
